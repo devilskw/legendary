@@ -1,0 +1,137 @@
+from config import Config
+from tkinter import *
+from typing import Tuple
+from tkVideoPlayer import TkinterVideo
+from tkinter.filedialog import askopenfilename
+
+
+class Gui:
+  cfg: Config
+
+  root: Tk
+  root_title: str = "Legendary by 192K"
+  root_width: int = 1000
+  root_height: int = 600
+
+  fr_video: Frame
+  fr_video_title: Label
+  video: TkinterVideo
+  btn_video_pause: Button
+  btn_video_stop: Button
+  btn_video_ff: Button
+  btn_video_rw: Button
+  txt_video_time: Entry
+  lbl_video_total_time: Label
+
+  mframe: Frame
+  mframe_title: Label
+
+  rframe: Frame
+  rframe_title: Label
+
+
+
+
+  def __init__(self, root: Tk) -> None:
+    self.cfg = Config()
+    self.create_window(root)
+    self.show()
+
+  def show(self):
+    self.window.mainloop()
+
+  def show_frame(self, frame: Frame):
+    frame.tkraise()
+
+  def create_window(self, root: Tk):
+    self.root = root
+    self.root.geometry(f'{self.root_width}x{self.root_height}+0+0')
+    self.root.title(self.root_title)
+
+    self.window.rowconfigure(0, weight=1)
+    self.window.columnconfigure(0, weight=1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # frames creation
+    self.fr_video = Frame(self.window, bg="orange")
+    self.mframe = Frame(self.window, bg="red")
+    self.rframe = Frame(self.window, bg="blue")
+
+    for frame in (self.fr_video, self.mframe, self.rframe):
+      frame.grid(row=0, column=0, sticky="nsew")
+
+    # left frame
+    self.create_video_frame()
+
+
+  def create_video_frame(self):
+    self.video_frame_title = Label(self.fr_video, text="Video", bg="yellow")
+    self.video_frame_title.pack(side=LEFT)
+
+    video_frame_btn = Button(self.fr_video, text="Open", command=lambda:self.show_frame(self.mframe))
+    video_frame_btn.pack()
+    self.show_frame(self.fr_video)
+
+
+
+
+
+
+  fr_video: Frame
+  fr_video_title: Label
+  video: TkinterVideo
+  btn_video_pause: Button
+  btn_video_stop: Button
+  btn_video_ff: Button
+  btn_video_rw: Button
+  txt_video_time: Entry
+  lbl_video_total_time: Label
+
+
+
+
+
+
+
+
+
+
+
+    def video_create(self, parent: Misc, file: str = None) -> TkinterVideo:
+      videoplayer = TkinterVideo(master=parent, scaled=True, keep_aspect=True)
+      if file != None:
+        videoplayer.load(file)
+      return videoplayer
+
+    def load_video(self, video: TkinterVideo, file: str = None):
+      video.pack(fill="both", expand=True)
+      video.load(file)
+      video.play()
+      video.update()
+
+    def video_set_size(self, video: TkinterVideo, size: Tuple[int, int]) -> None:
+      video.set_size(size, True)
+      video.update()
+
+    def video_start_or_pause(self, video: TkinterVideo) -> None:
+      video.play() if video.is_paused() else video.pause()
+      video.update()
